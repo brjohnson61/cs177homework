@@ -1,4 +1,5 @@
 import urllib.request
+from Crypto.Cipher import AES  
 
 URL1 = "http://www.cs.ucsb.edu/~tessaro/cs177/hw/cipher1.txt"
 URL2 = "http://www.cs.ucsb.edu/~tessaro/cs177/hw/cipher2.txt"
@@ -32,20 +33,149 @@ def monoSub(text):
              "Z":0}
     for letter in text:
         frequency[letter] = frequency[letter] + 1
-
+    
+    min=0
+    minLetter = ""
     for commonChar in frequency:
-        min = 0
-        minLetter = ""
         if(len(newMapping)<12):
+            print(newMapping)
             newMapping += commonChar
-        else:
-            if(min < frequency[commonChar]):
-                #do something
+            if(frequency[commonChar] < min or len(newMapping)==1):
+                min = frequency[commonChar]
+                minLetter = commonChar
+        elif(frequency[commonChar] > min):
+            newMapping = newMapping.replace(minLetter, commonChar)
+            min = frequency[commonChar];
+            minLetter = commonChar
+            for c in newMapping:
+                if(frequency[c] < min):
+                    min = frequency[c]
+                    minLetter = c
+        print(newMapping)
+    moreFrequent=""
+    lessFrequent=""
+    
+    for i in range(6):
+        maxMore = 0
+        maxLetterMore = ""
+        for c in newMapping:
+            if(frequency[c] > maxMore and c not in moreFrequent):
+                maxMore = frequency[c]
+                maxLetterMore = c;
+        moreFrequent += maxLetterMore
+    for i in range(6):
+        maxLess = 0
+        maxLetterLess = ""
+        for c in newMapping:
+            if(frequency[c] > maxLess and c not in moreFrequent and c not in lessFrequent):
+                maxLess = frequency[c]
+                maxLetterLess = c
+        lessFrequent += maxLetterLess
+      
+    print("moreFrequent "+ moreFrequent)
+    print("lessFrequent "+ lessFrequent)  
+
+    for letter in moreFrequent:
+        print(letter + " " + str(frequency[letter]))
+
+    for letter in lessFrequent:
+        print(letter + " " + str(frequency[letter]))
+
+    
+    moreCommon = ["etaoin","etaoni","etaion","etaino","etanoi","etanio",
+                  "etoian","etoina","etoain","etoani","etonia","etonai"]
+    
+    lessCommon = ["shrdlu","shrdul","shrldu","shrlud","srhdlu","srhdul",
+                  "srhldu","srhlud","hsrdlu","hsrdul","hsrldu","hsrlud"]
+
+    
+    ##Interactive Method
+
+    #output = text
+    #Frequent = moreFrequent+lessFrequent
+    #i=0
+    #mapping = {"e":"","t":"","o":"","a":"","i":"","n":"","h":"","s":"","r":"","d":"","l":"","u":""}
+    #print("Frequent: "+Frequent)
+    #print(mapping)
+    #option = input("Enter a letter to replace the letter "+ Frequent[i] +" next or enter 'quit' to quit")
+    #while(option != "quit"):
+    #    if(option == "reset"):
+    #        output = text
+    #        i=0
+    #        for entry in mapping:
+    #            mapping[entry] = ""
+    #    else:
+    #        print("Replacing "+Frequent[i]+" with "+option)
+    #        mapping[option] = Frequent[i]
+    #        output = output.replace(Frequent[i], option)
+    #        print("output: "+output)
+    #        i += 1
+    #        print(mapping)
+    #    option = input("Enter a letter to replace the letter "+ Frequent[i] +" next, enter 'quit' to quit, or enter 'reset' to start over")
+        
+
+    
+    
+    ##ORIGINAL METHOD
+
+    #outputBoth = ""
+    #for j in range(12):
+    #    output = text
+    #    #output = output.replace("S", "h")
+    #    for i in range(6):
+    #        output = output.replace(moreFrequent[i], moreCommon[j][i])
+    #        #print("replacing "+moreFrequent[i]+" with "+moreCommon[j][i])
+    #    for k in range(12):
+    #        outputBoth = output
+    #        for l in range(6):
+    #            outputBoth = outputBoth.replace(lessFrequent[l], lessCommon[k][l])
+    #            #print("replacing "+lessFrequent[l]+" with "+lessCommon[k][l])
+    #        if("the" in outputBoth and "and" in outputBoth and "in" in outputBoth and "that" in outputBoth):
+    #            print(moreFrequent+lessFrequent)
+    #            print(moreCommon[j]+lessCommon[k])
+    #            print(outputBoth)
+    #            print("\n")
 
 
-    for c in frequency:
-        print(c + ": " + str(frequency[c]))
-    print(newMapping)
+
+
+
+
+
+
+##BRUTE FORCE
+    print("BRUTE FORCE")
+    max = -1
+    maxLetter = ""
+    descending = ""
+    print("Frequency")
+    print(frequency)
+    for i in frequency:
+        max = -1
+        for commonChar in frequency:
+            if(frequency[commonChar] > max and commonChar not in descending):
+                max = frequency[commonChar]
+                maxLetter = commonChar
+        descending+=maxLetter
+
+
+    print(descending)
+    for c in descending:
+        print(c + " " + str(frequency[c]))
+
+    output = text
+    frequentLetters = "etaoinsrhldcumfpgwybvkxjqz"
+    mapping = {"e":"","t":"","a":"","o":"","i":"","n":"","s":"","r":"","h":"","l":"","d":"","c":"","u":"","m":"","f":"","p":"","g":"","w":"","y":"","b":"","v":"","k":"","x":"","j":"","q":"","z":""}
+
+
+    
+
+
+def mapFunc(text, commonEng, commonText, index):
+        output = text
+        output = output.replace(commonText[index], common)
+
+
 
 def setupURLs(URLs):
     for entry in URLs:
