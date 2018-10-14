@@ -1,6 +1,6 @@
 import urllib.request
-from Crypto.Cipher import AES
-from Crypto import Random  
+#from Crypto.Cipher import AES
+#from Crypto import Random  
 
 URL1 = "http://www.cs.ucsb.edu/~tessaro/cs177/hw/cipher1.txt"
 URL2 = "http://www.cs.ucsb.edu/~tessaro/cs177/hw/cipher2.txt"
@@ -35,6 +35,18 @@ def monoSub(text):
     for letter in text:
         frequency[letter] = frequency[letter] + 1
     
+    
+    max = -1
+    maxLetter = ""
+    descending = ""    
+    for i in frequency:
+        max = -1
+        for commonChar in frequency:
+            if(frequency[commonChar] > max and commonChar not in descending):
+                max = frequency[commonChar]
+                maxLetter = commonChar
+        descending+=maxLetter
+
     min=0
     minLetter = ""
     for commonChar in frequency:
@@ -92,27 +104,47 @@ def monoSub(text):
     
     ##Interactive Method
 
-    #output = text
-    #Frequent = moreFrequent+lessFrequent
-    #i=0
-    #mapping = {"e":"","t":"","o":"","a":"","i":"","n":"","h":"","s":"","r":"","d":"","l":"","u":""}
-    #print("Frequent: "+Frequent)
-    #print(mapping)
-    #option = input("Enter a letter to replace the letter "+ Frequent[i] +" next or enter 'quit' to quit")
-    #while(option != "quit"):
-    #    if(option == "reset"):
-    #        output = text
-    #        i=0
-    #        for entry in mapping:
-    #            mapping[entry] = ""
-    #    else:
-    #        print("Replacing "+Frequent[i]+" with "+option)
-    #        mapping[option] = Frequent[i]
-    #        output = output.replace(Frequent[i], option)
-    #        print("output: "+output)
-    #        i += 1
-    #        print(mapping)
-    #    option = input("Enter a letter to replace the letter "+ Frequent[i] +" next, enter 'quit' to quit, or enter 'reset' to start over")
+    output = text
+    Frequent = descending
+    i=0
+    mapping = {"e":"G","t":"Q","a":"","o":"","i":"","n":"","h":"S","s":"","r":"","d":"","l":"","u":""}
+    print("Frequent: "+Frequent)
+    print(mapping)
+    option = input("Enter a letter to replace the letter "+ Frequent[i] +" next or enter 'quit' to quit")
+    while(option != "quit"):
+        output = output.replace("Q","t")
+        output = output.replace("G","e")
+        output = output.replace("S","h")
+        output = output.replace("H", "g")
+        output = output.replace("W", "r")
+        output = output.replace("M", "b")
+        output = output.replace("Z", "u")   
+        if(option == "reset"):
+            output = text
+            
+            i=0
+            for entry in mapping:
+                mapping[entry] = ""
+        else:
+            print("Replacing "+Frequent[i]+" with "+option)
+            mapping[option] = Frequent[i]
+            output = output.replace(Frequent[i], option)
+            outputclean = output
+            for c in outputclean:
+                if(c.isupper()):
+                    outputclean = outputclean.replace("Q","t")
+                    outputclean = outputclean.replace("G","e")
+                    outputclean = outputclean.replace("S","h")
+                    outputclean = outputclean.replace("H", "g")
+                    outputclean = outputclean.replace("M", "b")
+                    outputclean = outputclean.replace(c, "*")
+                    
+                    
+            print("output: "+output)
+            print("output clean: " + outputclean)
+            i += 1
+            print(mapping)
+        option = input("Enter a letter to replace the letter "+ Frequent[i] +" next, enter 'quit' to quit, or enter 'reset' to start over")
         
 
     
@@ -189,20 +221,20 @@ setupURLs(URLs)
 for url in URLs:
     print(URLs[url])
 
-def task4a():
-    key = bytes.fromhex("10042018000000000000000000000000")
-    iv = Random.new().read(16)
-    AEScipher =  AES.new(key, AES.MODE_CBC, iv)
-    message = iv + AEScipher.encrypt(key)
-    output = message.hex()
-    print(output)
+#def task4a():
+#    key = bytes.fromhex("10042018000000000000000000000000")
+#    iv = Random.new().read(16)
+#    AEScipher =  AES.new(key, AES.MODE_CBC, iv)
+#    message = iv + AEScipher.encrypt(key)
+#    output = message.hex()
+#    print(output)
 
 
 #Task 2a
 #shiftDecode(URLs[URL1])
 
 #Task 2b
-#monoSub(URLs[URL2])
+monoSub(URLs[URL2])
 
 #Task 4
-task4a()
+#task4a()
