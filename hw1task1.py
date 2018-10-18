@@ -1,6 +1,6 @@
 import urllib.request
-#from Crypto.Cipher import AES
-#from Crypto import Random  
+from Crypto.Cipher import AES
+from Crypto import Random  
 
 URL1 = "http://www.cs.ucsb.edu/~tessaro/cs177/hw/cipher1.txt"
 URL2 = "http://www.cs.ucsb.edu/~tessaro/cs177/hw/cipher2.txt"
@@ -221,20 +221,20 @@ setupURLs(URLs)
 for url in URLs:
     print(URLs[url])
 
-#def task4a():
-#    key = bytes.fromhex("10042018000000000000000000000000")
-#    iv = Random.new().read(16)
-#    AEScipher =  AES.new(key, AES.MODE_CBC, iv)
-#    message = iv + AEScipher.encrypt(key)
-#    output = message.hex()
-#    print(output)
+def task4a():
+   key = bytes.fromhex("10042018000000000000000000000000")
+   iv = Random.new().read(16)
+   AEScipher =  AES.new(key, AES.MODE_ECB, iv)
+   message = iv + AEScipher.encrypt(key)
+   output = message.hex()
+   print(output)
 
 
 #Task 2a
 #shiftDecode(URLs[URL1])
 
 #Task 2b
-monoSub(URLs[URL2])
+#monoSub(URLs[URL2])
 
 #Task 4
 #task4a()
