@@ -206,7 +206,7 @@ def monoSub(text):
 
 def mapFunc(text, commonEng, commonText, index):
         output = text
-        output = output.replace(commonText[index], common)
+        output = output.replace(commonText[index], commonEng)
 
 
 
