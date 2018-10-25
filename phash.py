@@ -2,6 +2,7 @@ from Crypto.Hash import MD5
 import binascii
 
 def hash(msg):
+    msg = msg.encode('utf-8')
     # pad message to 16 bytes
     if len(msg) < 16:
         msg = msg + (16 - len(msg)) * 'A'
