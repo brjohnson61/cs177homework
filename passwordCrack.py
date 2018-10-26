@@ -1,5 +1,25 @@
 import crypt
 
+def checkPassword(user, password, salt, hash):
+    e_pass = crypt.crypt(password, salt)
+    if(e_pass in hash):
+        print("User: " + user + ", Password: " + password)
+        return True
+    else:
+        return False
+
+def passwordFind(maxPasswordLength, username, salt, guess, myhash):
+    characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_-+=/?><.,~`"
+    for i in range(len(characters)):
+        guess0 = guess + characters[i]
+        #print(guess0)
+        if(checkPassword(user, salt, guess0, myhash)):
+            return True
+        else:
+            if(maxPasswordLength > 1):
+                passwordFind(maxPasswordLength-1, username, salt, guess0, myhash)
+                
+
 with open('shadow', 'r') as f:
     data = f.readlines()
 
@@ -33,7 +53,7 @@ for i in range(len(usernames)):
     maxLength = 20
 
 
-    passwordFind(maxLength, user, salts[i], myguess, myhash)
+    passwordFind(maxLength, user, salt, myguess, myhash)
 
     # for i in range(len(characters)):
         
@@ -49,24 +69,3 @@ for i in range(len(usernames)):
     #             if(checkPassword(user, salt, guess0, hash)):
     #                 break
                 
-
-def passwordFind(maxPasswordLength, username, salt, guess, myhash):
-    characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_-+=/?><.,~`"
-    for i in range(len(characters)):
-        guess0 = guess + characters[i]
-        if(checkPassword(user, salt, guess0, myhash)):
-            return True
-        else:
-            if(maxPasswordLength > 1):
-                if(passwordFind(maxPasswordLength-1, username, salt, guess0, myhash)):
-                    return True
-                else:
-                    return False
-                    
-def checkPassword(user, password, salt, hash):
-    e_pass = crypt.crypt(password, salt)
-    if(e_pass in hash):
-        print("User: " + user + ", Password: " + password)
-        return True
-    else:
-        return False
