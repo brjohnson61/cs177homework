@@ -2,8 +2,9 @@ import crypt
 
 def checkPassword(user, password, salt, hash):
     e_pass = crypt.crypt(password, salt)
-    if(e_pass in hash):
-        print("User: " + user + ", Password: " + password)
+    if(str(e_pass) in str(hash)):
+        with open("passwords.txt", "a") as myFile:
+            myFile.write("User: " + user + ", Password: " + password)
         return True
     else:
         return False
@@ -12,7 +13,7 @@ def passwordFind(maxPasswordLength, username, salt, guess, myhash):
     characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_-+=/?><.,~`"
     for i in range(len(characters)):
         guess0 = guess + characters[i]
-        #print(guess0)
+        print(guess0)
         if(checkPassword(user, salt, guess0, myhash)):
             return True
         else:
@@ -38,22 +39,23 @@ for hash in data:
         salt = "$" + hash.split("$")[1] + "$" + hash.split("$")[2] + "$"
         salts.append(salt)
     else:
-        salts.append("") 
+        salts.append("aa") 
 
 print(usernames)
 print(salts)
 
-characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_-+=/?><.,~`"
+characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_-+=/?><.,~`[]{\|}"
 
 for i in range(len(usernames)):
     user = usernames[i]
     salt = salts[i]
     myguess = ""
     myhash = hashes[i]
-    maxLength = 20
+    maxLength = 6
 
-
-    passwordFind(maxLength, user, salt, myguess, myhash)
+    while(maxLength < 20):
+        passwordFind(maxLength, user, salt, myguess, myhash)
+        maxLength = maxLength + 1
 
     # for i in range(len(characters)):
         
